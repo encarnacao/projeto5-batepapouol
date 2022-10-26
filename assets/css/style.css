@@ -1,59 +1,97 @@
 /* Path: assets/css/style.css */
-@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,300;0,400;0,700;1,400&display=swap');
+
 * {
     box-sizing: border-box;
 }
 
-body{
+body {
     font-family: 'Roboto', sans-serif;
 }
 
-header, footer{
+header,
+footer {
     background-color: #fff;
     position: fixed;
     width: 100%;
     height: 80px;
     display: flex;
     align-items: center;
-    justify-content: space-around;
-
+    justify-content: space-between;
+    padding: 0px 20px;
 }
 
-header{
+header {
     top: 0;
     left: 0;
     box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.05);
     z-index: 1;
 }
 
-header img{
+header img {
     width: 75px;
 }
 
-header .people{
+header .people {
     font-size: 45px;
 }
 
-main{
+main {
     margin: 80px 0;
     background: #f3f3f3;
     height: 100vh;
     width: 100vw;
+    padding: 20px 0;
 
 }
 
-footer{
+.pm,
+.message,
+.in-out {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    margin: 2px 0px;
+    font-size: 14px;
+    line-height: 20px;
+    width: 100%;
+    padding: 8px;
+    border-radius: 2px;
+    word-wrap: break-word;
+}
+
+.in-out {
+    background: #DCDCDC;
+}
+
+.message {
+    background: #FFF;
+}
+
+.pm {
+    background: #FFDEDE;
+}
+
+.username {
+    font-weight: 700;
+}
+
+.timestamp {
+    color: #AAA;
+}
+
+footer {
     bottom: 0;
     left: 0;
     box-shadow: 0px -4px 6px rgba(0, 0, 0, 0.05);
     z-index: 1;
 }
 
-footer .send{
+footer .send {
     font-size: 26px;
 }
 
-#message{
+#message {
     width: 100%;
     height: 30px;
     border: none;
@@ -63,8 +101,7 @@ footer .send{
     resize: none;
 }
 
-#message::placeholder{
+#message::placeholder {
     color: #000;
-    font-weight: italic;
+    font-style: italic;
 }
-
