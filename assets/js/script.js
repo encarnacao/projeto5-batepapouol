@@ -21,6 +21,7 @@ function entrarNaSalaSucesso(response) {
     /**
      * Caso entre com sucesso, permanece mantendo a conexão com o servidor a cada 5 segundos.
      */
+    validade = response.data;
     buscarMensagens();
 }
 
@@ -54,7 +55,7 @@ function buscarMensagensSucesso(response) {
     mensagens = response.data;
     renderizarMensagens(ultimaMensagem)
     ultimaMensagem = mensagens[mensagens.length - 1];
-    
+
 }
 
 function buscarMensagensErro(erro) {
@@ -95,9 +96,34 @@ function renderizarMensagens(ultimaMensagem) {
 }
 
 function enviarMensagem() {
+    const textoDaMensagem = document.querySelector("#message-input").value;
+    let type = "message";
+    if (destinatario === undefined) { 
+        destinatario = "Todos";
+    } else if(destinatario !== "Todos") {
+        type = "private_message";
+    }
+    const mensagem = { from: nome, to: destinatario, text: textoDaMensagem, type: type };
+    const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/messages", mensagem);
+    promise.then(enviarMensagemSucesso);
+    promise.catch(enviarMensagemErro);
+}
 
+function enviarMensagemSucesso(response) {
+    document.querySelector("#message-input").value = "";
+    buscarMensagens();
+}
+
+function enviarMensagemErro(erro) {
+    console.log(erro);
+    alert("Conexão perdida. Atualize a página.");
 }
 
 entrarNaSala();
 conexao = setInterval(manterConexao, 5000);
 busca = setInterval(buscarMensagens, 3000);
+
+document.querySelector("#send").addEventListener("click", enviarMensagem);
+document.querySelector("#message-input").addEventListener("keypress", function (e) {
+    if (e.key === "Enter") enviarMensagem();
+});

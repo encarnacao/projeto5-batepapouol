@@ -115,6 +115,10 @@ footer #send {
     font-style: italic;
 }
 
+#send{
+    cursor: pointer;
+}
+
 .target {
     font-weight: 300;
     font-size: 14px;
