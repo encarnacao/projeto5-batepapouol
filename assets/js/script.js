@@ -1,8 +1,8 @@
 /* Variáveis globais */
 const chat = document.querySelector("#chat");
 const telaInicial = document.querySelector(".tela-inicial");
-
-let mensagens, conexao, busca, destinatario, visibility, participant, ultimaMensagem = { time: "mock message" };
+const visibilidades = document.querySelector(".visibility").children;
+let mensagens, conexao, busca, buscaParticipantes, destinatario, visibility, lastSelected, lastSelectedIndex, participants, ultimaMensagem = { time: "mock message" };
 //Utilizado um setTimeout para a página carregar antes de colocar seu nome.
 let nome;
 /*------------------*/
@@ -35,6 +35,7 @@ function entrarNaSalaSucesso(response) {
      * Caso entre com sucesso, permanece mantendo a conexão com o servidor a cada 5 segundos.
      */
     conexao = setInterval(manterConexao, 5000);
+    buscaParticipantes = setInterval(buscarParticipantes, 5000);
     telaInicial.classList.add("hidden");
 }
 
@@ -47,13 +48,14 @@ function entrarNaSalaErro(erro) {
     }
 }
 
+
 function manterConexaoErro(erro) {
     /**
      * Caso a conexão seja perdida, pede para que usuário entre com novo nome
      */
     clearInterval(conexao);
-    nome = prompt("Conexão perdida. Insira novo nome:");
-    entrarNaSala();
+    alert("Conexão perdida. Atualize a página.");
+    window.location.reload();
 }
 
 function buscarMensagens() {
@@ -138,6 +140,89 @@ function enviar() {
     enviarMensagem(textoDaMensagem);
 }
 
+function buscarParticipantes() {
+    const promise = axios.get("https://mock-api.driven.com.br/api/v6/uol/participants");
+    promise.then(buscarParticipantesSucesso);
+    promise.catch(buscarParticipantesErro);
+}
+
+function buscarParticipantesSucesso(response) {
+    participantes = response.data;
+    renderizarParticipantes();
+}
+
+function buscarParticipantesErro(erro) {
+    clearInterval(buscaParticipantes);
+    clearInterval(conexao);
+    console.log(erro);
+    alert("Conexão perdida. Atualize a página.");
+    window.location.reload();
+}
+
+function renderizarParticipantes() {
+    const lista = document.querySelector(".participants-list");
+    lista.innerHTML = `
+    <li>
+        <div>
+            <ion-icon class="left-icon" name="people"></ion-icon>
+            <p>Todos</p>
+        </div>
+        <ion-icon class="right-icon" name="checkmark"></ion-icon>
+    </li>`;
+    lista.querySelector("li").addEventListener("click", selecionarParticipante);
+    if(destinatario === undefined || lista.querySelector(".selected") === null) lista.querySelector("li").classList.add("selected");
+    let li;
+    for (let i = 0; i < participantes.length; i++) {
+        li = document.createElement("li");
+        li.innerHTML = `
+        <div>
+            <ion-icon class="left-icon" name="person-circle"></ion-icon>
+            <p>${participantes[i].name}</p>
+        </div>
+        <ion-icon class="right-icon" name="checkmark"></ion-icon>`;
+        lista.appendChild(li);
+        li.addEventListener("click", selecionarParticipante);
+    }
+    
+
+}
+
+function selecionarParticipante(e) {
+    e.stopPropagation();
+    const pai = e.target.parentNode;
+    const target = document.querySelector(".target");
+    target.innerHTML = "";
+    pai.querySelector(".selected").classList.remove("selected");
+    e.target.classList.add("selected");
+    destinatario = e.target.querySelector("p").innerHTML;
+    if(destinatario !== "Todos" && visibility !== "restricted") { 
+        target.innerHTML = `Enviando para ${destinatario} (publicamente)`;
+    } else if (destinatario !== "Todos" && visibility === "restricted") {
+        target.innerHTML = `Enviando para ${destinatario} (reservadamente)`;
+    }
+}
+
+function alternarOverlay(){
+    const overlay = document.querySelector(".overlay-participants");
+    const escondido = overlay.classList.contains("hidden");
+    if(!escondido){
+        setTimeout(() => {overlay.classList.add("hidden")}, 1000);
+    } else{
+        overlay.classList.remove("hidden");
+    }
+    setTimeout(function(){
+        overlay.children[0].classList.toggle("translated");
+        overlay.classList.toggle("transparent");
+    },100);
+}
+
+function selecionarVisibilidade(e){
+    e.stopPropagation();
+    const pai = this.parentNode;
+    pai.querySelector(".selected").classList.remove("selected");
+    this.classList.add("selected");
+    visibility = this.getAttribute("visibility");
+}
 
 /* Ações ao carregar a página */
 busca = setInterval(buscarMensagens, 3000);
@@ -149,8 +234,7 @@ document.querySelector("#message-input").addEventListener("keypress", function (
 });
 
 document.querySelector("#nome").addEventListener("input", function (e) {
-    const input = document.querySelector("#nome");
-    nome = input.value;
+    nome = e.target.value;
     if (nome === "") {
         document.querySelector("#btn-entrar").disabled = true;
     } else {
@@ -161,4 +245,10 @@ document.querySelector("#nome").addEventListener("input", function (e) {
 document.querySelector("#nome").addEventListener("keypress", function (e) {
     if (e.key === "Enter") entrarNaSala();
 });
+
+for(let i = 0; i < visibilidades.length; i++){
+    visibilidades[i].addEventListener("click", selecionarVisibilidade);
+}
+
+
 /* ------------------------------------- */

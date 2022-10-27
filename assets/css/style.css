@@ -10,7 +10,7 @@ body {
 }
 
 
-.tela-inicial{
+.tela-inicial {
     background-color: #fff;
     height: 100vh;
     width: 100vw;
@@ -23,31 +23,31 @@ body {
     left: 0;
 }
 
-.tela-inicial .logo{
+.tela-inicial .logo {
     margin: 72px;
 }
 
-.tela-inicial img{
+.tela-inicial img {
     width: 130px;
 }
 
-.input-nome{
-    display:flex;
+.input-nome {
+    display: flex;
     flex-direction: column;
     align-items: center;
-    position:absolute;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.erro{
-    font-size:16px;
+.erro {
+    font-size: 16px;
     color: #ff0000;
     margin-bottom: 10px;
 }
 
-.tela-inicial #nome{
+.tela-inicial #nome {
     font-size: 18px;
     text-align: center;
     width: 260px;
@@ -58,7 +58,7 @@ body {
     outline: none;
 }
 
-.tela-inicial #btn-entrar{
+.tela-inicial #btn-entrar {
     background: rgb(2, 134, 24);
     font-size: 18px;
     color: #fff;
@@ -68,27 +68,27 @@ body {
     border: none;
 }
 
-.tela-inicial #btn-entrar:disabled{
+.tela-inicial #btn-entrar:disabled {
     background: #E7E7E7;
     color: #696969;
 }
 
-.loading{
+.loading {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    position:absolute;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
 }
 
-.loading img{
+.loading img {
     width: 80px;
 }
 
-.loading h1{
+.loading h1 {
     font-size: 18px;
     color: #000;
     margin-top: 15px;
@@ -200,9 +200,100 @@ footer #send {
     font-style: italic;
 }
 
-#send{
+#send {
     cursor: pointer;
 }
+
+.overlay-participants {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 2;
+    transition: all 1s;
+}
+
+.overlay-participants aside {
+    position: absolute;
+    right: 0;
+    top: 0;
+    background: #fff;
+    width: 70%;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 0px 20px;
+    transition: all 0.2s;
+}
+
+.titulo {
+    margin-top: 20px;
+    width: 80%;
+    height: 50px;
+    font-size: 16px;
+    line-height: 19px;
+    font-weight: 700;
+}
+
+ul {
+    width: 90%;
+    max-height: 60%;
+    margin-top: 10px;
+    overflow-y: scroll;
+}
+
+li {
+    list-style: none;
+    width: 100%;
+    height: 40px;
+    margin: 5px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+}
+/*Position Absolute no paragrafo e no ion-icon porque essa desgraça não ficava centralizado direito, então fiz na marra*/
+li p {
+    vertical-align: middle;
+    display: inline-block;
+    position: absolute;
+    left: 30px;
+    top: 50%;
+    transform: translateY(-50%);
+    
+}
+
+li div {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    position: relative;
+}
+
+.left-icon {
+    margin-right: 7px;
+    font-size: 25px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-59%);
+}
+
+.right-icon {
+    font-size: 22px;
+    font-weight: 700;
+    color: #28BB25;
+    --ionicon-stroke-width: 70px;
+    display: none;
+}
+
+li.selected .right-icon {
+    display: initial;
+}
+
 
 .target {
     font-weight: 300;
@@ -214,6 +305,17 @@ footer #send {
     left: 0;
 }
 
+.translated{
+    transform: translateX(100%);
+}
+.transparent{
+    opacity: 0;
+}
+
 .hidden {
     display: none;
+}
+
+.no-scroll {
+    overflow-y: hidden;
 }

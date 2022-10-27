@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="assets/media/favicon.jpeg" type="image/x-icon">
 </head>
 
-<body>
+<body class="no-scroll">
 
     <div class="tela-inicial">
 
@@ -31,7 +31,7 @@
 
     <header>
         <img src="assets/media/logo.png" alt="">
-        <div id="people">
+        <div id="people" onclick="alternarOverlay()">
             <ion-icon name="people"></ion-icon>
         </div>
     </header>
@@ -48,6 +48,33 @@
             <ion-icon name="paper-plane-outline"></ion-icon>
         </div>
     </footer>
+
+    <div class="overlay-participants transparent hidden" onclick="alternarOverlay()">
+        <aside class="translated">
+            <div class="titulo">Escolha um contato para enviar mensagem:</div>
+            <ul class="participants-list">
+                Carregando participantes...
+            </ul>
+            <div class="titulo">Escolha a visibilidade:</div>
+            <ul class="visibility">
+                <li class="selected" visibility="public">
+                    <div>
+                        <ion-icon class="left-icon" name="lock-open"></ion-icon>
+                        <p>Público</p>
+                    </div>
+                    <ion-icon class="right-icon" name="checkmark"></ion-icon>
+                </li>
+                <li visibility="restricted">
+                    <div>
+                        <ion-icon class="left-icon" name="lock-closed"></ion-icon>
+                        <p>Reservadamente</p>
+                    </div>
+                    <ion-icon class="right-icon" name="checkmark"></ion-icon>
+                </li>
+            </ul>
+
+        </aside>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>
