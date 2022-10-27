@@ -148,7 +148,7 @@ document.querySelector("#message-input").addEventListener("keypress", function (
     if (e.key === "Enter") enviar();
 });
 
-document.querySelector("#nome").addEventListener("keypress", function (e) {
+document.querySelector("#nome").addEventListener("keydown", function (e) {
     const input = document.querySelector("#nome");
     nome = input.value;
     if (nome === "") {
