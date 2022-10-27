@@ -2,7 +2,7 @@
 const chat = document.querySelector("#chat");
 let mensagens, conexao, busca, destinatario, ultimaMensagem = { time: "mock message" };
 //Utilizado um setTimeout para a página carregar antes de colocar seu nome.
-let nome = prompt("Insira seu nome:"), i = 0;
+let nome = prompt("Insira seu nome:");
 /*------------------*/
 
 
@@ -78,12 +78,12 @@ function conteudoMensagem(mensagem) {
 
 function renderizarMensagens(ultimaMensagem) {
     chat.innerHTML = "";
-    let mensagem;
+    let mensagem, div;
     for (let i = 0; i < mensagens.length; i++) {
         mensagem = mensagens[i];
         //Não renderiza mensagens que não são para todos ou para você.
         if (mensagem.to !== "Todos" && mensagem.to !== nome) continue;
-        const div = document.createElement("div");
+        div = document.createElement("div");
         const paragraph = document.createElement("p");
         div.classList.add(mensagem.type);
         paragraph.innerHTML = `<span class="time">${mensagem.time}</span>&nbsp;&nbsp;` + conteudoMensagem(mensagem);
