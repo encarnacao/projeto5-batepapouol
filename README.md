@@ -10,7 +10,7 @@ Como no projeto passado, temos que os requisitos gerais são:
 + Utilizar Git e GitHub, com um repositório público, para versionamento;
 + Realizar commits a cada requisito implementado.
 
-Além disso, o layout deve seguir o [figma], sendo necessário apenas a implementação de um layout mobile.
+Além disso, o layout deve seguir o [figma](https://www.figma.com/file/Xc2rk591z7YuTZ4pxVjtaO/Chat-UOL-(Copy)), sendo necessário apenas a implementação de um layout mobile.
 
 ### Chat
 
