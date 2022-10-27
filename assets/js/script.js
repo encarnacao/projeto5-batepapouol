@@ -1,6 +1,6 @@
 /* Variáveis globais */
 const chat = document.querySelector("#chat");
-let messages, conexao, busca;
+let mensagens, conexao, busca, destinatario, ultimaMensagem = { time: "mock message" };
 //Utilizado um setTimeout para a página carregar antes de colocar seu nome.
 let nome = prompt("Insira seu nome:"), i = 0;
 /*------------------*/
@@ -21,7 +21,6 @@ function entrarNaSalaSucesso(response) {
     /**
      * Caso entre com sucesso, permanece mantendo a conexão com o servidor a cada 5 segundos.
      */
-    conexao = setInterval(manterConexao, 5000);
     buscarMensagens();
 }
 
@@ -53,18 +52,16 @@ function buscarMensagens() {
 
 function buscarMensagensSucesso(response) {
     mensagens = response.data;
-    if (i === 0) {
-        renderizarMensagens(mensagens[mensagens.length - 1], true);
-        i++;
-    } else {
-        renderizarMensagens(mensagens[mensagens.length - 1]);
-    }
-    busca = setInterval(buscarMensagens, 3000);
+    renderizarMensagens(ultimaMensagem)
+    ultimaMensagem = mensagens[mensagens.length - 1];
+    
 }
 
 function buscarMensagensErro(erro) {
-    alert("Deu erro");
     clearInterval(busca);
+    clearInterval(conexao);
+    console.log(erro);
+    alert("Conexão perdida. Atualize a página.");
 }
 
 function conteudoMensagem(mensagem) {
@@ -79,10 +76,11 @@ function conteudoMensagem(mensagem) {
     }
 }
 
-function renderizarMensagens(ultimaMensagem, scroll = false) {
+function renderizarMensagens(ultimaMensagem) {
     chat.innerHTML = "";
+    let mensagem;
     for (let i = 0; i < mensagens.length; i++) {
-        const mensagem = mensagens[i];
+        mensagem = mensagens[i];
         //Não renderiza mensagens que não são para todos ou para você.
         if (mensagem.to !== "Todos" && mensagem.to !== nome) continue;
         const div = document.createElement("div");
@@ -91,9 +89,15 @@ function renderizarMensagens(ultimaMensagem, scroll = false) {
         paragraph.innerHTML = `<span class="time">${mensagem.time}</span>&nbsp;&nbsp;` + conteudoMensagem(mensagem);
         div.appendChild(paragraph);
         chat.appendChild(div);
-        //Caso haja uma nova mensagem, rola a página para baixo.
-        if (i === mensagens.length - 1 && (ultimaMensagem !== mensagem || scroll)) div.scrollIntoView();
     }
+    //Caso haja uma nova mensagem, rola a página para baixo.
+    if (ultimaMensagem.time !== mensagem.time) div.scrollIntoView();
+}
+
+function enviarMensagem() {
+
 }
 
 entrarNaSala();
+conexao = setInterval(manterConexao, 5000);
+busca = setInterval(buscarMensagens, 3000);
