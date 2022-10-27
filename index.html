@@ -15,13 +15,13 @@
 
     <header>
         <img src="assets/media/logo.png" alt="">
-        <div class="people">
+        <div id="people">
             <ion-icon name="people"></ion-icon>
         </div>
     </header>
     <main>
-        <div class="chat">
-            <div class="in-out">
+        <div id="chat">
+            <div class="status">
                 <p><span class="timestamp">(00:00:00)</span>&nbsp;&nbsp;<span class="username">Nome </span> entrou na
                     sala...</p>
             </div>
@@ -29,13 +29,13 @@
                 <p><span class="timestamp">(00:00:00)</span>&nbsp;&nbsp;<span class="username">Nome </span> para <span
                         class="username"> Todos</span>: Mensagem</p>
             </div>
-            <div class="pm">
+            <div class="private_message">
                 <p><span class="timestamp">(00:00:00)</span>&nbsp;&nbsp;<span class="username">Nome</span>
                     reservadamente para
                     <span class="username"> Nome2</span>: Mensagem
                 </p>
             </div>
-            <div class="in-out">
+            <div class="status">
                 <p><span class="timestamp">(00:00:00)</span>&nbsp;&nbsp;<span class="username">Nome </span> saiu da
                     sala...</p>
             </div>
@@ -45,7 +45,7 @@
             <input type="text" id="message-input" placeholder="Escreva aqui...">
             <div class="target"></div>
         </div>
-        <div class="send">
+        <div id="send">
             <ion-icon name="paper-plane-outline"></ion-icon>
         </div>
     </footer>

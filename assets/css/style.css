@@ -32,7 +32,7 @@ header img {
     width: 75px;
 }
 
-header .people {
+header #people {
     font-size: 45px;
 }
 
@@ -41,13 +41,13 @@ main {
     background: #f3f3f3;
     height: 100vh;
     width: 100vw;
-    padding: 20px 0;
+    padding: 20px 0px;
 
 }
 
-.pm,
+.private_message,
 .message,
-.in-out {
+.status {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
@@ -60,7 +60,7 @@ main {
     word-wrap: break-word;
 }
 
-.in-out {
+.status {
     background: #DCDCDC;
 }
 
@@ -68,7 +68,7 @@ main {
     background: #FFF;
 }
 
-.pm {
+.private_message {
     background: #FFDEDE;
 }
 
@@ -87,7 +87,7 @@ footer {
     z-index: 1;
 }
 
-footer .send {
+footer #send {
     font-size: 26px;
 }
 
