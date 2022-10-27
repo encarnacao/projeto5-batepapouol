@@ -1,6 +1,6 @@
 /* Variáveis globais */
 const chat = document.querySelector("#chat");
-let mensagens, conexao, busca, destinatario, ultimaMensagem = { time: "mock message" };
+let mensagens, conexao, busca, destinatario, visibility, participant, ultimaMensagem = { time: "mock message" };
 //Utilizado um setTimeout para a página carregar antes de colocar seu nome.
 let nome = prompt("Insira seu nome:");
 /*------------------*/
@@ -82,8 +82,8 @@ function renderizarMensagens(ultimaMensagem) {
     let mensagem, div;
     for (let i = 0; i < mensagens.length; i++) {
         mensagem = mensagens[i];
-        //Não renderiza mensagens que não são para todos ou para você.
-        if (mensagem.to !== "Todos" && mensagem.to !== nome) continue;
+        //Não renderiza mensagens privadas de outras pessoas.
+        if (mensagem.to !== nome && mensagem.type === "private_message") continue;
         div = document.createElement("div");
         const paragraph = document.createElement("p");
         div.classList.add(mensagem.type);
@@ -100,7 +100,7 @@ function enviarMensagem() {
     let type = "message";
     if (destinatario === undefined) { 
         destinatario = "Todos";
-    } else if(destinatario !== "Todos") {
+    } else if(visibility === "restricted") {
         type = "private_message";
     }
     const mensagem = { from: nome, to: destinatario, text: textoDaMensagem, type: type };
@@ -117,6 +117,7 @@ function enviarMensagemSucesso(response) {
 function enviarMensagemErro(erro) {
     console.log(erro);
     alert("Conexão perdida. Atualize a página.");
+    window.location.reload();
 }
 
 entrarNaSala();
