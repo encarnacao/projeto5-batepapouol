@@ -148,7 +148,7 @@ document.querySelector("#message-input").addEventListener("keypress", function (
     if (e.key === "Enter") enviar();
 });
 
-document.querySelector("#nome").addEventListener("keydown", function (e) {
+document.querySelector("#nome").addEventListener("input", function (e) {
     const input = document.querySelector("#nome");
     nome = input.value;
     if (nome === "") {
@@ -156,6 +156,9 @@ document.querySelector("#nome").addEventListener("keydown", function (e) {
     } else {
         document.querySelector("#btn-entrar").disabled = false;
     }
+});
+
+document.querySelector("#nome").addEventListener("keypress", function (e) {
     if (e.key === "Enter") entrarNaSala();
 });
 /* ------------------------------------- */
