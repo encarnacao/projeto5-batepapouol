@@ -1,12 +1,25 @@
 /* Variáveis globais */
 const chat = document.querySelector("#chat");
+const telaInicial = document.querySelector(".tela-inicial");
+
 let mensagens, conexao, busca, destinatario, visibility, participant, ultimaMensagem = { time: "mock message" };
 //Utilizado um setTimeout para a página carregar antes de colocar seu nome.
-let nome = prompt("Insira seu nome:");
+let nome;
 /*------------------*/
 
+function alternarVisibilidade(erro = false){
+    const inputArea = telaInicial.querySelector(".input-nome");
+    const errorMessage = inputArea.querySelector(".erro"); 
+    const loading = telaInicial.querySelector(".loading");
+    inputArea.classList.toggle("hidden");
+    loading.classList.toggle("hidden");
+    if (erro && errorMessage.classList.contains("hidden")) {
+        errorMessage.classList.remove("hidden");
+    }
+}
 
 function entrarNaSala() {
+    alternarVisibilidade();
     const promise = axios.post("https://mock-api.driven.com.br/api/v6/uol/participants", { name: nome });
     promise.then(entrarNaSalaSucesso);
     promise.catch(entrarNaSalaErro);
@@ -21,18 +34,16 @@ function entrarNaSalaSucesso(response) {
     /**
      * Caso entre com sucesso, permanece mantendo a conexão com o servidor a cada 5 segundos.
      */
-    validade = response.data;
-    buscarMensagens();
+    conexao = setInterval(manterConexao, 5000);
+    telaInicial.classList.add("hidden");
 }
 
 function entrarNaSalaErro(erro) {
     /**
      * Caso não entre com sucesso, pede para que usuário entre com novo nome
      */
-    console.log(erro);
     if (erro.response.status === 400) {
-        nome = prompt("Nome já em uso. Insira novo nome:");
-        entrarNaSala();
+        alternarVisibilidade(true);
     }
 }
 
@@ -63,6 +74,7 @@ function buscarMensagensErro(erro) {
     clearInterval(conexao);
     console.log(erro);
     alert("Conexão perdida. Atualize a página.");
+    window.location.reload();
 }
 
 function conteudoMensagem(mensagem) {
@@ -97,9 +109,9 @@ function renderizarMensagens(ultimaMensagem) {
 
 function enviarMensagem(textoDaMensagem) {
     let type = "message";
-    if (destinatario === undefined) { 
+    if (destinatario === undefined) {
         destinatario = "Todos";
-    } else if(visibility === "restricted") {
+    } else if (visibility === "restricted") {
         type = "private_message";
     }
     const mensagem = { from: nome, to: destinatario, text: textoDaMensagem, type: type };
@@ -118,18 +130,32 @@ function enviarMensagemErro(erro) {
     window.location.reload();
 }
 
-function enviar(){
+function enviar() {
+    //Queria que a mensagem fosse enviada e sumisse imediatamente, mas ainda há um delay. De qualquer forma deixarei assim.
     const input = document.querySelector("#message-input");
     const textoDaMensagem = input.value;
     input.value = "";
     enviarMensagem(textoDaMensagem);
 }
 
-entrarNaSala();
-conexao = setInterval(manterConexao, 5000);
+
+/* Ações ao carregar a página */
 busca = setInterval(buscarMensagens, 3000);
+
 
 document.querySelector("#send").addEventListener("click", enviar);
 document.querySelector("#message-input").addEventListener("keypress", function (e) {
     if (e.key === "Enter") enviar();
 });
+
+document.querySelector("#nome").addEventListener("keypress", function (e) {
+    const input = document.querySelector("#nome");
+    nome = input.value;
+    if (nome === "") {
+        document.querySelector("#btn-entrar").disabled = true;
+    } else {
+        document.querySelector("#btn-entrar").disabled = false;
+    }
+    if (e.key === "Enter") entrarNaSala();
+});
+/* ------------------------------------- */
