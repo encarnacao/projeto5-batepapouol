@@ -95,8 +95,7 @@ function renderizarMensagens(ultimaMensagem) {
     if (ultimaMensagem.time !== mensagem.time) div.scrollIntoView();
 }
 
-function enviarMensagem() {
-    const textoDaMensagem = document.querySelector("#message-input").value;
+function enviarMensagem(textoDaMensagem) {
     let type = "message";
     if (destinatario === undefined) { 
         destinatario = "Todos";
@@ -110,7 +109,6 @@ function enviarMensagem() {
 }
 
 function enviarMensagemSucesso(response) {
-    document.querySelector("#message-input").value = "";
     buscarMensagens();
 }
 
@@ -120,11 +118,18 @@ function enviarMensagemErro(erro) {
     window.location.reload();
 }
 
+function enviar(){
+    const input = document.querySelector("#message-input");
+    const textoDaMensagem = input.value;
+    input.value = "";
+    enviarMensagem(textoDaMensagem);
+}
+
 entrarNaSala();
 conexao = setInterval(manterConexao, 5000);
 busca = setInterval(buscarMensagens, 3000);
 
-document.querySelector("#send").addEventListener("click", enviarMensagem);
+document.querySelector("#send").addEventListener("click", enviar);
 document.querySelector("#message-input").addEventListener("keypress", function (e) {
-    if (e.key === "Enter") enviarMensagem();
+    if (e.key === "Enter") enviar();
 });
