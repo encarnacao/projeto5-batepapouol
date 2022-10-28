@@ -20,8 +20,8 @@
         </div>
         <div class="input-nome">
             <div class="erro hidden">Nome já selecionado, escolha outro</div>
-            <input type="text" id="nome" placeholder="Digite seu nome">
-            <button id="btn-entrar" onclick="entrarNaSala()" disabled>Entrar</button>
+            <input type="text" id="nome" placeholder="Digite seu nome" data-identifier="enter-name">
+            <button id="btn-entrar" onclick="entrarNaSala()" data-identifier="start" disabled>Entrar</button>
         </div>
         <div class="loading hidden">
             <img src="assets/media/loading.gif" alt="Loading">
@@ -49,7 +49,7 @@
         </div>
     </footer>
 
-    <div class="overlay-participants hidden" >
+    <div class="overlay-participants hidden">
         <div class="overlay-fundo transparent" onclick="alternarOverlay()"></div>
         <aside class="translated">
             <div class="titulo">Escolha um contato para enviar mensagem:</div>
@@ -58,14 +58,14 @@
             </ul>
             <div class="titulo">Escolha a visibilidade:</div>
             <ul class="visibility">
-                <li class="selected" visibility="public">
+                <li class="selected" visibility="public" data-identifier="visibility">
                     <div>
                         <ion-icon class="left-icon" name="lock-open"></ion-icon>
                         <p>Público</p>
                     </div>
                     <ion-icon class="right-icon" name="checkmark"></ion-icon>
                 </li>
-                <li visibility="restricted">
+                <li visibility="restricted" data-identifier="visibility">
                     <div>
                         <ion-icon class="left-icon" name="lock-closed"></ion-icon>
                         <p>Reservadamente</p>
@@ -73,10 +73,10 @@
                     <ion-icon class="right-icon" name="checkmark"></ion-icon>
                 </li>
             </ul>
-    
+
         </aside>
     </div>
-    
+
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>

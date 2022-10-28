@@ -7,9 +7,9 @@ let mensagens, conexao, destinatario, buscando, visibilidade, participantes, ult
 let nome;
 /*------------------*/
 
-function alternarVisibilidade(erro = false){
+function alternarVisibilidade(erro = false) {
     const inputArea = telaInicial.querySelector(".input-nome");
-    const errorMessage = inputArea.querySelector(".erro"); 
+    const errorMessage = inputArea.querySelector(".erro");
     const loading = telaInicial.querySelector(".loading");
     inputArea.classList.toggle("hidden");
     loading.classList.toggle("hidden");
@@ -96,7 +96,7 @@ function renderizarMensagens(ultimaMensagem) {
     for (let i = 0; i < mensagens.length; i++) {
         mensagem = mensagens[i];
         //Não renderiza mensagens privadas de outras pessoas.
-        if ((mensagem.to !== nome && mensagem.from !== nome ) && mensagem.type === "private_message") continue;
+        if ((mensagem.to !== nome && mensagem.from !== nome) && mensagem.type === "private_message") continue;
         div = document.createElement("div");
         const paragraph = document.createElement("p");
         div.classList.add(mensagem.type);
@@ -162,8 +162,8 @@ function buscarParticipantesErro(erro) {
     window.location.reload();
 }
 
-function resetarVisibilidade(){
-    if(visibilidades[1].classList.contains("selected")){
+function resetarVisibilidade() {
+    if (visibilidades[1].classList.contains("selected")) {
         visibilidades[0].classList.add("selected");
         visibilidades[1].classList.remove("selected");
         visibility = "public";
@@ -189,9 +189,10 @@ function renderizarParticipantes() {
             <p>${participantes[i].name}</p>
         </div>
         <ion-icon class="right-icon" name="checkmark"></ion-icon>`;
-        if(destinatario === participantes[i].name){
+        if (destinatario === participantes[i].name) {
             li.classList.add("selected");
         }
+        li.setAttribute("data-identifier", "participant");
         lista.appendChild(li);
         li.addEventListener("click", selecionarParticipante);
     }
@@ -205,15 +206,9 @@ function renderizarParticipantes() {
 
 }
 
-function checkIfStatus(){
-    const status = ultimaMensagem.type === "status";
-    if(status){
-        buscarParticipantes();
-    }
-}
 
-function desselecionar(pai){
-    if( pai.querySelector(".selected") !== null){
+function desselecionar(pai) {
+    if (pai.querySelector(".selected") !== null) {
         pai.querySelector(".selected").classList.remove("selected");
     }
 }
@@ -227,60 +222,60 @@ function selecionarParticipante(e) {
     destinationMessage();
 }
 
-function publicoOuReservado(){
-    if(visibilidade !== "restricted"){
+function publicoOuReservado() {
+    if (visibilidade !== "restricted") {
         return "(publicamente)";
-    } else{
+    } else {
         return "(reservadamente)";
     }
 }
 
-function destinatarioValido(){
+function destinatarioValido() {
     if (destinatario === "Todos" || destinatario === undefined) return true;
     return false;
 }
 
-function destinationMessage(){
+function destinationMessage() {
     /**
      * Altera a mensagem abaixo do campo de mensagem falando destino de mensagem
      */
     const destination = document.querySelector(".destination");
     destination.innerHTML = "";
-    if(destinatarioValido()) { 
+    if (destinatarioValido()) {
         return;
-    } else{
+    } else {
         destination.innerHTML = `Enviando para ${destinatario}` + publicoOuReservado();
     }
 }
 
-function alternarOverlay(){
+function alternarOverlay() {
     const overlay = document.querySelector(".overlay-participants");
     const escondido = overlay.classList.contains("hidden");
     //Usar toggle estava causando alguns bugs, decidi adicionar e remover manualmente.
     //Caso esteja não estja escondido, esconde. Caso contrário, mostra.
-    if(!escondido){
+    if (!escondido) {
         //Para de buscar participantes
         clearInterval(buscando);
-        setTimeout(() => {overlay.classList.add("hidden")}, 1000);
-        setTimeout(function(){
+        setTimeout(() => { overlay.classList.add("hidden") }, 1000);
+        setTimeout(function () {
             const asideMenu = document.querySelector("aside");
             asideMenu.classList.add("translated");
             overlay.children[0].classList.add("transparent");
-        },100);
-    } else{
+        }, 100);
+    } else {
         buscarParticipantes();
-        //Busca novos participantes a cada 5 segundos.
-        buscando = setInterval(buscarParticipantes, 5000);
+        //Busca novos participantes a cada 10 segundos.
+        buscando = setInterval(buscarParticipantes, 10000);
         overlay.classList.remove("hidden");
-        setTimeout(function(){
+        setTimeout(function () {
             const asideMenu = document.querySelector("aside");
             asideMenu.classList.remove("translated");
             overlay.children[0].classList.remove("transparent");
-        },100);
+        }, 100);
     }
 }
 
-function selecionarVisibilidade(e){
+function selecionarVisibilidade(e) {
     const pai = this.parentNode;
     pai.querySelector(".selected").classList.remove("selected");
     this.classList.add("selected");
@@ -310,7 +305,7 @@ document.querySelector("#nome").addEventListener("keypress", function (e) {
     if (e.key === "Enter") entrarNaSala();
 });
 
-for(let i = 0; i < visibilidades.length; i++){
+for (let i = 0; i < visibilidades.length; i++) {
     visibilidades[i].addEventListener("click", selecionarVisibilidade);
 }
 document.querySelector("#people").addEventListener("click", alternarOverlay);
