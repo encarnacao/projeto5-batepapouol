@@ -268,16 +268,11 @@ li {
     justify-content: space-between;
     cursor: pointer;
 }
-/*Position Absolute no paragrafo e no ion-icon porque essa desgraça não ficava centralizado direito, então fiz na marra*/
+
 li p {
     vertical-align: middle;
     display: inline-block;
     word-break: break-all;
-    width: 300px;
-    position: absolute;
-    left: 30px;
-    top: 50%;
-    transform: translateY(-50%);
     
 }
 
@@ -285,16 +280,11 @@ li div {
     display: flex;
     align-items: center;
     height: 100%;
-    position: relative;
 }
 
 .left-icon {
     margin-right: 7px;
     font-size: 25px;
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translateY(-59%);
 }
 
 .right-icon {
