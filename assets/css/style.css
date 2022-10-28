@@ -142,7 +142,6 @@ main {
     width: 100%;
     padding: 8px;
     border-radius: 2px;
-    word-wrap: break-word;
 }
 
 .status {
@@ -155,6 +154,10 @@ main {
 
 .private_message {
     background: #FFDEDE;
+}
+
+.message p, .private_message p, .status p {
+    word-break: break-all;
 }
 
 .username {
@@ -269,6 +272,8 @@ li {
 li p {
     vertical-align: middle;
     display: inline-block;
+    word-break: break-all;
+    width: 200px;
     position: absolute;
     left: 30px;
     top: 50%;
@@ -324,8 +329,4 @@ li.selected .right-icon {
 
 .hidden {
     display: none;
-}
-
-.no-scroll {
-    overflow-y: hidden;
 }

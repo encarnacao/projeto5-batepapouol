@@ -2,7 +2,7 @@
 const chat = document.querySelector("#chat");
 const telaInicial = document.querySelector(".tela-inicial");
 const visibilidades = document.querySelector(".visibility").children;
-let mensagens, conexao, destinatario, visibility, lastSelected, lastSelectedIndex, participants, ultimaMensagem = { time: "mock message" };
+let mensagens, conexao, destinatario, buscando, visibilidade, participantes, ultimaMensagem = { time: "mock message" };
 //Utilizado um setTimeout para a página carregar antes de colocar seu nome.
 let nome;
 /*------------------*/
@@ -112,7 +112,7 @@ function enviarMensagem(textoDaMensagem) {
     let type = "message";
     if (destinatario === undefined) {
         destinatario = "Todos";
-    } else if (visibility === "restricted") {
+    } else if (visibilidade === "restricted") {
         type = "private_message";
     }
     const mensagem = { from: nome, to: destinatario, text: textoDaMensagem, type: type };
@@ -139,6 +139,8 @@ function enviar() {
     enviarMensagem(textoDaMensagem);
 }
 
+
+
 function buscarParticipantes() {
     const promise = axios.get("https://mock-api.driven.com.br/api/v6/uol/participants");
     promise.then(buscarParticipantesSucesso);
@@ -159,6 +161,14 @@ function buscarParticipantesErro(erro) {
     window.location.reload();
 }
 
+function resetarVisibilidade(){
+    if(visibilidades[1].classList.contains("selected")){
+        visibilidades[0].classList.add("selected");
+        visibilidades[1].classList.remove("selected");
+        visibility = "public";
+    }
+}
+
 function renderizarParticipantes() {
     const lista = document.querySelector(".participants-list");
     lista.innerHTML = `
@@ -169,9 +179,11 @@ function renderizarParticipantes() {
         </div>
         <ion-icon class="right-icon" name="checkmark"></ion-icon>
     </li>`;
+    /* Não consegui pensar em uma forma de renderizar os participantes mantendo a seleção anterior, então reseta tudo a principio */
     lista.querySelector("li").addEventListener("click", selecionarParticipante);
     lista.querySelector("li").classList.add("selected");
     destinatario = "Todos";
+    resetarVisibilidade()
     destinationMessage();
     let li;
     for (let i = 0; i < participantes.length; i++) {
@@ -189,9 +201,19 @@ function renderizarParticipantes() {
 
 }
 
+function checkIfStatus(){
+    const status = ultimaMensagem.type === "status";
+    if(status){
+        buscarParticipantes();
+    }
+}
+
 function desselecionar(pai){
     if( pai.querySelector(".selected") !== null){
         pai.querySelector(".selected").classList.remove("selected");
+    } else{
+        //Caso não encontre um objeto selecionado, recarrega lista de participantes.
+        buscarParticipantes();
     }
 }
 
@@ -204,7 +226,7 @@ function selecionarParticipante(e) {
 }
 
 function publicoOuReservado(){
-    if(visibility !== "restricted"){
+    if(visibilidade !== "restricted"){
         return "(publicamente)";
     } else{
         return "(reservadamente)";
@@ -232,24 +254,35 @@ function destinationMessage(){
 function alternarOverlay(){
     const overlay = document.querySelector(".overlay-participants");
     const escondido = overlay.classList.contains("hidden");
+    //Usar toggle estava causando alguns bugs, decidi adicionar e remover manualmente.
+    //Caso esteja não estja escondido, esconde. Caso contrário, mostra.
     if(!escondido){
+        //Para de buscar participantes
+        clearInterval(buscando);
         setTimeout(() => {overlay.classList.add("hidden")}, 1000);
+        setTimeout(function(){
+            const asideMenu = document.querySelector("aside");
+            asideMenu.classList.add("translated");
+            overlay.children[0].classList.add("transparent");
+        },100);
     } else{
         buscarParticipantes();
+        //Caso a ultima mensagem tenha sido de status, atualiza a lista de participantes a cada 10 segundos.
+        buscando = setInterval(checkIfStatus, 10000);
         overlay.classList.remove("hidden");
+        setTimeout(function(){
+            const asideMenu = document.querySelector("aside");
+            asideMenu.classList.remove("translated");
+            overlay.children[0].classList.remove("transparent");
+        },100);
     }
-    setTimeout(function(){
-        const asideMenu = document.querySelector("aside");
-        asideMenu.classList.toggle("translated");
-        overlay.children[0].classList.toggle("transparent");
-    },100);
 }
 
 function selecionarVisibilidade(e){
     const pai = this.parentNode;
     pai.querySelector(".selected").classList.remove("selected");
     this.classList.add("selected");
-    visibility = this.getAttribute("visibility");
+    visibilidade = this.getAttribute("visibility");
     destinationMessage();
 }
 
@@ -278,6 +311,8 @@ document.querySelector("#nome").addEventListener("keypress", function (e) {
 for(let i = 0; i < visibilidades.length; i++){
     visibilidades[i].addEventListener("click", selecionarVisibilidade);
 }
+
+document.querySelector("#people").addEventListener("click", alternarOverlay);
 
 
 /* ------------------------------------- */
