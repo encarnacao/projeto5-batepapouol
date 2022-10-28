@@ -210,12 +210,21 @@ footer #send {
     left: 0;
     width: 100%;
     height: 100%;
+    z-index: 3;
+}
+
+.overlay-fundo{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.6);
     z-index: 2;
     transition: all 1s;
 }
 
-.overlay-participants aside {
+aside {
     position: absolute;
     right: 0;
     top: 0;
@@ -227,6 +236,7 @@ footer #send {
     align-items: center;
     padding: 0px 20px;
     transition: all 0.2s;
+    z-index: 3;
 }
 
 .titulo {

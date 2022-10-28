@@ -11,7 +11,7 @@
     <link rel="shortcut icon" href="assets/media/favicon.jpeg" type="image/x-icon">
 </head>
 
-<body class="no-scroll">
+<body>
 
     <div class="tela-inicial">
 
@@ -42,14 +42,15 @@
     <footer>
         <div class="message-input">
             <input type="text" id="message-input" placeholder="Escreva aqui...">
-            <div class="target"></div>
+            <div class="destination"></div>
         </div>
         <div id="send">
             <ion-icon name="paper-plane-outline"></ion-icon>
         </div>
     </footer>
 
-    <div class="overlay-participants transparent hidden" onclick="alternarOverlay()">
+    <div class="overlay-participants hidden" >
+        <div class="overlay-fundo transparent" onclick="alternarOverlay()""></div>
         <aside class="translated">
             <div class="titulo">Escolha um contato para enviar mensagem:</div>
             <ul class="participants-list">
@@ -72,9 +73,10 @@
                     <ion-icon class="right-icon" name="checkmark"></ion-icon>
                 </li>
             </ul>
-
+    
         </aside>
     </div>
+    
 
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"></script>

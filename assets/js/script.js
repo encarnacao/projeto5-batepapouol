@@ -2,7 +2,7 @@
 const chat = document.querySelector("#chat");
 const telaInicial = document.querySelector(".tela-inicial");
 const visibilidades = document.querySelector(".visibility").children;
-let mensagens, conexao, busca, buscaParticipantes, destinatario, visibility, lastSelected, lastSelectedIndex, participants, ultimaMensagem = { time: "mock message" };
+let mensagens, conexao, destinatario, visibility, lastSelected, lastSelectedIndex, participants, ultimaMensagem = { time: "mock message" };
 //Utilizado um setTimeout para a página carregar antes de colocar seu nome.
 let nome;
 /*------------------*/
@@ -35,7 +35,6 @@ function entrarNaSalaSucesso(response) {
      * Caso entre com sucesso, permanece mantendo a conexão com o servidor a cada 5 segundos.
      */
     conexao = setInterval(manterConexao, 5000);
-    buscaParticipantes = setInterval(buscarParticipantes, 5000);
     telaInicial.classList.add("hidden");
 }
 
@@ -97,7 +96,7 @@ function renderizarMensagens(ultimaMensagem) {
     for (let i = 0; i < mensagens.length; i++) {
         mensagem = mensagens[i];
         //Não renderiza mensagens privadas de outras pessoas.
-        if (mensagem.to !== nome && mensagem.type === "private_message") continue;
+        if ((mensagem.to !== nome && mensagem.from !== nome ) && mensagem.type === "private_message") continue;
         div = document.createElement("div");
         const paragraph = document.createElement("p");
         div.classList.add(mensagem.type);
@@ -147,6 +146,7 @@ function buscarParticipantes() {
 }
 
 function buscarParticipantesSucesso(response) {
+    console.log("Achou participantes");
     participantes = response.data;
     renderizarParticipantes();
 }
@@ -170,7 +170,9 @@ function renderizarParticipantes() {
         <ion-icon class="right-icon" name="checkmark"></ion-icon>
     </li>`;
     lista.querySelector("li").addEventListener("click", selecionarParticipante);
-    if(destinatario === undefined || lista.querySelector(".selected") === null) lista.querySelector("li").classList.add("selected");
+    lista.querySelector("li").classList.add("selected");
+    destinatario = "Todos";
+    destinationMessage();
     let li;
     for (let i = 0; i < participantes.length; i++) {
         li = document.createElement("li");
@@ -187,18 +189,43 @@ function renderizarParticipantes() {
 
 }
 
+function desselecionar(pai){
+    if( pai.querySelector(".selected") !== null){
+        pai.querySelector(".selected").classList.remove("selected");
+    }
+}
+
 function selecionarParticipante(e) {
-    e.stopPropagation();
     const pai = e.target.parentNode;
-    const target = document.querySelector(".target");
-    target.innerHTML = "";
-    pai.querySelector(".selected").classList.remove("selected");
+    desselecionar(pai);
     e.target.classList.add("selected");
     destinatario = e.target.querySelector("p").innerHTML;
-    if(destinatario !== "Todos" && visibility !== "restricted") { 
-        target.innerHTML = `Enviando para ${destinatario} (publicamente)`;
-    } else if (destinatario !== "Todos" && visibility === "restricted") {
-        target.innerHTML = `Enviando para ${destinatario} (reservadamente)`;
+    destinationMessage();
+}
+
+function publicoOuReservado(){
+    if(visibility !== "restricted"){
+        return "(publicamente)";
+    } else{
+        return "(reservadamente)";
+    }
+}
+
+function destinatarioValido(){
+    if (destinatario === "Todos" || destinatario === undefined) return true;
+    return false;
+}
+
+function destinationMessage(){
+    /**
+     * Altera a mensagem abaixo do campo de mensagem falando destino de mensagem
+     */
+    const destination = document.querySelector(".destination");
+    destination.innerHTML = "";
+    if(destinatarioValido()) { 
+        return;
+    } else{
+        destination.innerHTML = `Enviando para ${destinatario}` + publicoOuReservado();
     }
 }
 
@@ -208,20 +235,22 @@ function alternarOverlay(){
     if(!escondido){
         setTimeout(() => {overlay.classList.add("hidden")}, 1000);
     } else{
+        buscarParticipantes();
         overlay.classList.remove("hidden");
     }
     setTimeout(function(){
-        overlay.children[0].classList.toggle("translated");
-        overlay.classList.toggle("transparent");
+        const asideMenu = document.querySelector("aside");
+        asideMenu.classList.toggle("translated");
+        overlay.children[0].classList.toggle("transparent");
     },100);
 }
 
 function selecionarVisibilidade(e){
-    e.stopPropagation();
     const pai = this.parentNode;
     pai.querySelector(".selected").classList.remove("selected");
     this.classList.add("selected");
     visibility = this.getAttribute("visibility");
+    destinationMessage();
 }
 
 /* Ações ao carregar a página */
