@@ -110,9 +110,10 @@ function renderizarMensagens(ultimaMensagem) {
 
 function enviarMensagem(textoDaMensagem) {
     let type = "message";
+    const mensagemPrivada = visibilidade === "restricted";
     if (destinatario === undefined) {
         destinatario = "Todos";
-    } else if (visibilidade === "restricted") {
+    } else if (mensagemPrivada) {
         type = "private_message";
     }
     const mensagem = { from: nome, to: destinatario, text: textoDaMensagem, type: type };
@@ -154,7 +155,7 @@ function buscarParticipantesSucesso(response) {
 }
 
 function buscarParticipantesErro(erro) {
-    clearInterval(buscaParticipantes);
+    clearInterval(busca);
     clearInterval(conexao);
     console.log(erro);
     alert("Conexão perdida. Atualize a página.");
@@ -179,25 +180,28 @@ function renderizarParticipantes() {
         </div>
         <ion-icon class="right-icon" name="checkmark"></ion-icon>
     </li>`;
-    /* Não consegui pensar em uma forma de renderizar os participantes mantendo a seleção anterior, então reseta tudo a principio */
     lista.querySelector("li").addEventListener("click", selecionarParticipante);
-    lista.querySelector("li").classList.add("selected");
-    destinatario = "Todos";
-    resetarVisibilidade()
-    destinationMessage();
-    let li;
     for (let i = 0; i < participantes.length; i++) {
-        li = document.createElement("li");
+        const li = document.createElement("li");
         li.innerHTML = `
         <div>
             <ion-icon class="left-icon" name="person-circle"></ion-icon>
             <p>${participantes[i].name}</p>
         </div>
         <ion-icon class="right-icon" name="checkmark"></ion-icon>`;
+        if(destinatario === participantes[i].name){
+            li.classList.add("selected");
+        }
         lista.appendChild(li);
         li.addEventListener("click", selecionarParticipante);
     }
-    
+    //Caso a pessoa tenha saído, o destinatário é resetado.
+    if (lista.querySelector("li.selected") === null) {
+        lista.children[0].classList.add("selected");
+        destinatario = "Todos";
+        resetarVisibilidade();
+    }
+    destinationMessage();
 
 }
 
@@ -211,17 +215,15 @@ function checkIfStatus(){
 function desselecionar(pai){
     if( pai.querySelector(".selected") !== null){
         pai.querySelector(".selected").classList.remove("selected");
-    } else{
-        //Caso não encontre um objeto selecionado, recarrega lista de participantes.
-        buscarParticipantes();
     }
 }
 
 function selecionarParticipante(e) {
-    const pai = e.target.parentNode;
+    const target = this;
+    const pai = target.parentNode;
     desselecionar(pai);
-    e.target.classList.add("selected");
-    destinatario = e.target.querySelector("p").innerHTML;
+    target.classList.add("selected");
+    destinatario = target.querySelector("p").innerHTML;
     destinationMessage();
 }
 
@@ -267,8 +269,8 @@ function alternarOverlay(){
         },100);
     } else{
         buscarParticipantes();
-        //Caso a ultima mensagem tenha sido de status, atualiza a lista de participantes a cada 10 segundos.
-        buscando = setInterval(checkIfStatus, 10000);
+        //Busca novos participantes a cada 5 segundos.
+        buscando = setInterval(buscarParticipantes, 5000);
         overlay.classList.remove("hidden");
         setTimeout(function(){
             const asideMenu = document.querySelector("aside");
@@ -311,7 +313,6 @@ document.querySelector("#nome").addEventListener("keypress", function (e) {
 for(let i = 0; i < visibilidades.length; i++){
     visibilidades[i].addEventListener("click", selecionarVisibilidade);
 }
-
 document.querySelector("#people").addEventListener("click", alternarOverlay);
 
 
