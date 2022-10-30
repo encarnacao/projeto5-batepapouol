@@ -223,7 +223,7 @@ function resetarVisibilidade() {
     if (visibilidades[1].classList.contains("selected")) {
         visibilidades[0].classList.add("selected");
         visibilidades[1].classList.remove("selected");
-        visibility = "public";
+        visibilidade = "public";
     }
 }
 
