@@ -2,7 +2,7 @@
 const chat = document.querySelector("#chat");
 const telaInicial = document.querySelector(".tela-inicial");
 const visibilidades = document.querySelector(".visibility").children;
-let mensagens, conexao, destinatario, buscando, visibilidade, participantes, ultimaMensagem = { time: "mock message" };
+let mensagens, busca, conexao, destinatario, buscando, visibilidade, participantes, ultimaMensagem = { time: "mock message" };
 let nome;
 /*------------------*/
 
