@@ -133,6 +133,7 @@ function renderizarMensagens(ultimaMensagem) {
         div.classList.add(mensagem.type);
         paragraph.innerHTML = `<span class="time">${mensagem.time}</span>&nbsp;&nbsp;` + conteudoMensagem(mensagem);
         div.appendChild(paragraph);
+        div.setAttribute("data-test","message")
         chat.appendChild(div);
     }
     //Caso haja uma nova mensagem, rola a página para baixo.
@@ -237,7 +238,7 @@ function renderizarParticipantes() {
      */
     const lista = document.querySelector(".participants-list");
     lista.innerHTML = `
-    <li>
+    <li data-test="all">
         <div>
             <ion-icon class="left-icon" name="people"></ion-icon>
             <p>Todos</p>
@@ -252,11 +253,11 @@ function renderizarParticipantes() {
             <ion-icon class="left-icon" name="person-circle"></ion-icon>
             <p>${participantes[i].name}</p>
         </div>
-        <ion-icon class="right-icon" name="checkmark"></ion-icon>`;
+        <ion-icon class="right-icon" data-test="check" name="checkmark"></ion-icon>`;
         if (destinatario === participantes[i].name) {
             li.classList.add("selected");
         }
-        li.setAttribute("data-identifier", "participant");
+        li.setAttribute("data-test", "participant");
         lista.appendChild(li);
         li.addEventListener("click", selecionarParticipante);
     }

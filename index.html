@@ -20,8 +20,8 @@
         </div>
         <div class="input-nome">
             <div class="erro hidden">Nome já selecionado, escolha outro</div>
-            <input type="text" id="nome" autocomplete="off" placeholder="Digite seu nome" data-identifier="enter-name">
-            <button id="btn-entrar" onclick="entrarNaSala()" data-identifier="start" disabled>Entrar</button>
+            <input type="text" id="nome" autocomplete="off" placeholder="Digite seu nome" data-test="input-name">
+            <button id="btn-entrar" onclick="entrarNaSala()" data-test="send-name" disabled>Entrar</button>
         </div>
         <div class="loading hidden">
             <img src="assets/media/loading.gif" alt="Loading">
@@ -31,7 +31,7 @@
 
     <header>
         <img src="assets/media/logo.png" alt="">
-        <div id="people">
+        <div id="people" data-test="open-participants">
             <ion-icon name="people"></ion-icon>
         </div>
     </header>
@@ -41,10 +41,10 @@
     </main>
     <footer>
         <div class="message-input">
-            <input type="text" id="message-input" placeholder="Escreva aqui...">
-            <div class="destination"></div>
+            <input type="text" id="message-input" data-test="input-message" placeholder="Escreva aqui...">
+            <div class="destination" data-test="recipient"></div>
         </div>
-        <div id="send">
+        <div id="send" data-test="send-message">
             <ion-icon name="paper-plane-outline"></ion-icon>
         </div>
     </footer>
@@ -58,19 +58,19 @@
             </ul>
             <div class="titulo">Escolha a visibilidade:</div>
             <ul class="visibility">
-                <li class="selected" visibility="public" data-identifier="visibility">
+                <li class="selected" visibility="public" data-identifier="visibility" data-test="public">
                     <div>
                         <ion-icon class="left-icon" name="lock-open"></ion-icon>
                         <p>Público</p>
                     </div>
-                    <ion-icon class="right-icon" name="checkmark"></ion-icon>
+                    <ion-icon class="right-icon" data-test="check" name="checkmark"></ion-icon>
                 </li>
                 <li visibility="restricted" data-identifier="visibility">
                     <div>
-                        <ion-icon class="left-icon" name="lock-closed"></ion-icon>
+                        <ion-icon class="left-icon" data-test="private" name="lock-closed"></ion-icon>
                         <p>Reservadamente</p>
                     </div>
-                    <ion-icon class="right-icon" name="checkmark"></ion-icon>
+                    <ion-icon class="right-icon" data-test="check" name="checkmark"></ion-icon>
                 </li>
             </ul>
 
